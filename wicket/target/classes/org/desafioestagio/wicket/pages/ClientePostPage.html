@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org" lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Cliente</title>
+</head>
+<body>
+<div class="container mt-4">
+    <a href="http://localhost:8081/wicket/clientes">Home</a>
+    <h1 class="mb-4">Cadastro</h1>
+
+    <div wicket:id="feedback" class="alert alert-info"></div>
+
+    <form wicket:id="form">
+
+        <!-- Tipo de Pessoa -->
+        <div class="mb-3">
+            <label class="form-label">Tipo de Pessoa</label>
+            <label>
+                <select wicket:id="tipoPessoa" class="form-select"></select>
+            </label>
+        </div>
+
+        <!-- CPF/CNPJ -->
+        <div class="mb-3">
+            <label class="form-label">CPF/CNPJ</label>
+            <label>
+                <input type="text" class="form-control" wicket:id="cpfCnpj"/>
+            </label>
+        </div>
+
+        <!-- Email -->
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <label>
+                <input type="text" class="form-control" wicket:id="email"/>
+            </label>
+        </div>
+
+        <!-- Ativo -->
+        <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" wicket:id="ativo" id="ativoCheck">
+            <label class="form-check-label" for="ativoCheck">Ativo</label>
+        </div>
+
+        <!-- Pessoa Física -->
+        <div wicket:id="fisicaContainer">
+            <div class="mb-3">
+                <label class="form-label">Nome</label>
+                <label>
+                    <input type="text" class="form-control" wicket:id="nome"/>
+                </label>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">RG</label>
+                <label>
+                    <input type="text" class="form-control" wicket:id="rg"/>
+                </label>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Data de Nascimento</label>
+                <label>
+                    <input type="date" class="form-control" wicket:id="dataNascimento"/>
+                </label>
+            </div>
+        </div>
+
+        <!-- Pessoa Jurídica -->
+        <div wicket:id="juridicaContainer">
+            <div class="mb-3">
+                <label class="form-label">Razão Social</label>
+                <label>
+                    <input type="text" class="form-control" wicket:id="razaoSocial"/>
+                </label>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Inscrição Estadual</label>
+                <label>
+                    <input type="text" class="form-control" wicket:id="inscricaoEstadual"/>
+                </label>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Data de Criação</label>
+                <label>
+                    <input type="date" class="form-control" wicket:id="dataCriacao"/>
+                </label>
+            </div>
+        </div>
+
+        <!-- Lista de Endereços -->
+        <h4 class="mt-4">Endereços</h4>
+        <div wicket:id="enderecos">
+            <div class="border rounded p-3 mb-3">
+                <div class="mb-2">
+                    <label class="form-label">Logradouro</label>
+                    <label>
+                        <input type="text" class="form-control" wicket:id="logradouro"/>
+                    </label>
+                </div>
+
+                <div class="mb-2">
+                    <label class="form-label">Número</label>
+                    <label>
+                        <input type="text" class="form-control" wicket:id="numero"/>
+                    </label>
+                </div>
+
+                <div class="mb-2">
+                    <label class="form-label">CEP</label>
+                    <label>
+                        <input type="text" class="form-control" wicket:id="cep"/>
+                    </label>
+                </div>
+
+                <div class="mb-2">
+                    <label class="form-label">Bairro</label>
+                    <label>
+                        <input type="text" class="form-control" wicket:id="bairro"/>
+                    </label>
+                </div>
+
+                <div class="mb-2">
+                    <label class="form-label">Telefone</label>
+                    <label>
+                        <input type="text" class="form-control" wicket:id="telefone"/>
+                    </label>
+                </div>
+
+                <div class="mb-2">
+                    <label class="form-label">Cidade</label>
+                    <label>
+                        <input type="text" class="form-control" wicket:id="cidade"/>
+                    </label>
+                </div>
+
+                <div class="mb-2">
+                    <label class="form-label">Estado</label>
+                    <label>
+                        <input type="text" class="form-control" wicket:id="estado"/>
+                    </label>
+                </div>
+
+                <div class="mb-2">
+                    <label class="form-label">Complemento</label>
+                    <label>
+                        <input type="text" class="form-control" wicket:id="complemento"/>
+                    </label>
+                </div>
+
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" wicket:id="principal" id="principalCheck">
+                    <label class="form-check-label" for="principalCheck">Endereço Principal</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botão Salvar -->
+        <button type="submit" class="btn btn-success mt-3" wicket:id="salvar">Salvar</button>
+    </form>
+</div>
+</body>
+</html>
