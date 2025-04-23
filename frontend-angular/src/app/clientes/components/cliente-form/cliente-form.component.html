@@ -1,0 +1,175 @@
+<div class="container">
+  <div class="page-header">
+    <h1>{{ isEditMode ? 'Editar Cliente' : 'Novo Cliente' }}</h1>
+    <div class="header-actions">
+      <button mat-stroked-button color="warn" (click)="cancelar()">Cancelar</button>
+    </div>
+  </div>
+
+  <div class="loading-shade" *ngIf="isLoading">
+    <mat-spinner diameter="50"></mat-spinner>
+  </div>
+
+  <form [formGroup]="clienteForm" (ngSubmit)="onSubmit()">
+    <mat-card class="form-card">
+      <mat-card-content>
+        <div class="section-title">
+          <h2>Dados Gerais</h2>
+          <mat-divider></mat-divider>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Tipo de Pessoa</mat-label>
+            <mat-select formControlName="tipoPessoa">
+              <mat-option value="FISICA">Física</mat-option>
+              <mat-option value="JURIDICA">Jurídica</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" *ngIf="clienteForm.get('tipoPessoa')?.value === 'FISICA'">
+            <mat-label>Nome</mat-label>
+            <input matInput formControlName="nome" placeholder="Ex. João Silva">
+            <mat-error *ngIf="nomeControl?.hasError('required')">Nome é obrigatório</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" *ngIf="clienteForm.get('tipoPessoa')?.value === 'JURIDICA'">
+            <mat-label>Razão Social</mat-label>
+            <input matInput formControlName="razaoSocial" placeholder="Ex. Empresa LTDA">
+            <mat-error *ngIf="clienteForm.get('razaoSocial')?.hasError('required')">Razão Social é obrigatória</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>{{ clienteForm.get('tipoPessoa')?.value === 'FISICA' ? 'CPF' : 'CNPJ' }}</mat-label>
+            <input matInput formControlName="cpfCnpj" placeholder="Ex. 123.456.789-00">
+            <mat-error *ngIf="clienteForm.get('cpfCnpj')?.hasError('required')">
+              {{ clienteForm.get('tipoPessoa')?.value === 'FISICA' ? 'CPF' : 'CNPJ' }} é obrigatório
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" *ngIf="clienteForm.get('tipoPessoa')?.value === 'FISICA'">
+            <mat-label>RG</mat-label>
+            <input matInput formControlName="rg" placeholder="Ex. 12.345.678-9">
+            <mat-error *ngIf="clienteForm.get('rg')?.hasError('required')">RG é obrigatório</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" *ngIf="clienteForm.get('tipoPessoa')?.value === 'JURIDICA'">
+            <mat-label>Inscrição Estadual</mat-label>
+            <input matInput formControlName="inscricaoEstadual" placeholder="Ex. 123456789">
+            <mat-error *ngIf="clienteForm.get('inscricaoEstadual')?.hasError('required')">Inscrição Estadual é obrigatória</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" *ngIf="clienteForm.get('tipoPessoa')?.value === 'FISICA'">
+            <mat-label>Data de Nascimento</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="dataNascimento">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" placeholder="Ex. email@exemplo.com" type="email">
+            <mat-error *ngIf="clienteForm.get('email')?.hasError('required')">Email é obrigatório</mat-error>
+            <mat-error *ngIf="clienteForm.get('email')?.hasError('email')">Email inválido</mat-error>
+          </mat-form-field>
+
+          <div class="ativo-checkbox">
+            <mat-checkbox formControlName="ativo">Cliente Ativo</mat-checkbox>
+          </div>
+        </div>
+
+        <div class="section-title endereco-section">
+          <h2>Endereços</h2>
+          <button mat-mini-fab color="primary" type="button" (click)="adicionarEndereco()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+        <mat-divider></mat-divider>
+
+        <div formArrayName="enderecos">
+          <div *ngFor="let endereco of enderecos.controls; let i = index" [formGroupName]="i" class="endereco-container">
+            <div class="endereco-header">
+              <h3>Endereço {{ i + 1 }}</h3>
+              <div class="endereco-actions">
+                <mat-checkbox formControlName="principal" (change)="marcarComoPrincipal(i)">
+                  Principal
+                </mat-checkbox>
+                <button mat-icon-button color="warn" type="button" (click)="removerEndereco(i)" *ngIf="enderecos.length > 1">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Logradouro</mat-label>
+                <input matInput formControlName="logradouro" placeholder="Ex. Av. Paulista">
+                <mat-error *ngIf="endereco.get('logradouro')?.hasError('required')">Logradouro é obrigatório</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="numero-field">
+                <mat-label>Número</mat-label>
+                <input matInput formControlName="numero" placeholder="Ex. 123">
+                <mat-error *ngIf="endereco.get('numero')?.hasError('required')">Número é obrigatório</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>CEP</mat-label>
+                <input matInput formControlName="cep" placeholder="Ex. 01310-100">
+                <mat-error *ngIf="endereco.get('cep')?.hasError('required')">CEP é obrigatório</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Bairro</mat-label>
+                <input matInput formControlName="bairro" placeholder="Ex. Centro">
+                <mat-error *ngIf="endereco.get('bairro')?.hasError('required')">Bairro é obrigatório</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Complemento</mat-label>
+                <input matInput formControlName="complemento" placeholder="Ex. Apto 101">
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Cidade</mat-label>
+                <input matInput formControlName="cidade" placeholder="Ex. São Paulo">
+                <mat-error *ngIf="endereco.get('cidade')?.hasError('required')">Cidade é obrigatória</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Estado</mat-label>
+                <mat-select formControlName="estado">
+                  <mat-option *ngFor="let estado of estados" [value]="estado">{{ estado }}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="endereco.get('estado')?.hasError('required')">Estado é obrigatório</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Telefone</mat-label>
+                <input matInput formControlName="telefone" placeholder="Ex. (11) 98765-4321">
+              </mat-form-field>
+            </div>
+
+            <mat-divider *ngIf="i < enderecos.length - 1" class="endereco-divider"></mat-divider>
+          </div>
+        </div>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button mat-button type="button" (click)="cancelar()">Cancelar</button>
+        <button mat-raised-button color="primary" type="submit">
+          {{ isEditMode ? 'Atualizar' : 'Salvar' }}
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </form>
+</div>

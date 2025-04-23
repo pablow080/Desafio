@@ -1,0 +1,38 @@
+<div class="endereco-list">
+  <div *ngFor="let endereco of enderecos; let i = index" class="endereco-item">
+    <div class="endereco-header">
+      <h3>Endereço {{ i + 1 }}</h3>
+      <span class="endereco-badge" *ngIf="endereco.principal">Principal</span>
+      <div class="endereco-actions">
+        <button mat-icon-button color="accent" (click)="onEditar(endereco)" matTooltip="Editar endereço">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="onExcluir(endereco.id)" matTooltip="Excluir endereço">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+    
+    <div class="endereco-content">
+      <div class="endereco-line">
+        {{ endereco.logradouro }}, {{ endereco.numero }}
+        <span *ngIf="endereco.complemento">, {{ endereco.complemento }}</span>
+      </div>
+      <div class="endereco-line">
+        {{ endereco.bairro }}, {{ endereco.cidade }} - {{ endereco.estado }}
+      </div>
+      <div class="endereco-line">
+        CEP: {{ endereco.cep }}
+      </div>
+      <div class="endereco-line" *ngIf="endereco.telefone">
+        Telefone: {{ endereco.telefone }}
+      </div>
+    </div>
+    
+    <mat-divider *ngIf="i < enderecos.length - 1"></mat-divider>
+  </div>
+  
+  <div *ngIf="enderecos.length === 0" class="no-endereco">
+    <p>Nenhum endereço cadastrado</p>
+  </div>
+</div>

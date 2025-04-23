@@ -1,0 +1,41 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.app-toolbar {
+  position: fixed;
+  top: 0;
+  z-index: 2;
+}
+
+.toolbar-spacer {
+  flex: 1 1 auto;
+}
+
+.app-title {
+  margin-left: 16px;
+  font-size: 1.25rem;
+}
+
+.sidenav-container {
+  flex: 1;
+  margin-top: 64px; /* Altura da toolbar */
+}
+
+.sidenav {
+  width: 240px;
+}
+
+.sidenav-content {
+  padding: 20px;
+}
+
+.nav-icon {
+  margin-right: 8px;
+}
+
+.mat-list-item.active {
+  background-color: rgba(0, 0, 0, 0.04);
+}

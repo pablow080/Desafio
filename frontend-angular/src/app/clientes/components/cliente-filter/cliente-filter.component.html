@@ -1,0 +1,41 @@
+<div class="filter-container">
+  <mat-form-field appearance="fill">
+    <mat-label>Nome</mat-label>
+    <input matInput formControlName="nome" placeholder="Nome do cliente">
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Razão Social</mat-label>
+    <input matInput formControlName="razaoSocial" placeholder="Razão Social">
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>CPF/CNPJ</mat-label>
+    <input matInput formControlName="cpfCnpj" placeholder="CPF ou CNPJ">
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Email</mat-label>
+    <input matInput formControlName="email" placeholder="Email">
+  </mat-form-field>
+
+  <div *ngIf="filtersExpanded">
+    <mat-form-field appearance="fill">
+      <mat-label>RG</mat-label>
+      <input matInput formControlName="rg" placeholder="RG">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Inscrição Estadual</mat-label>
+      <input matInput formControlName="inscricaoEstadual" placeholder="Inscrição Estadual">
+    </mat-form-field>
+  </div>
+
+  <div class="filter-actions">
+    <button mat-stroked-button color="primary" (click)="aplicarFiltro()">Aplicar Filtro</button>
+    <button mat-stroked-button color="warn" (click)="limparFiltros()">Limpar</button>
+    <button mat-stroked-button (click)="toggleFilters()">
+      {{ filtersExpanded ? 'Ocultar Filtros Avançados' : 'Mostrar Filtros Avançados' }}
+    </button>
+  </div>
+</div>

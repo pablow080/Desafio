@@ -1,0 +1,112 @@
+<div class="container">
+  <div class="page-header">
+    <h1>Detalhes do Cliente</h1>
+    <div class="header-actions">
+      <button mat-stroked-button (click)="voltar()">
+        <mat-icon>arrow_back</mat-icon> Voltar
+      </button>
+      <button mat-stroked-button color="accent" (click)="exportarPdf()">
+        <mat-icon>picture_as_pdf</mat-icon> Exportar PDF
+      </button>
+      <button mat-stroked-button color="primary" (click)="editarCliente()">
+        <mat-icon>edit</mat-icon> Editar
+      </button>
+      <button mat-stroked-button color="warn" (click)="excluirCliente()">
+        <mat-icon>delete</mat-icon> Excluir
+      </button>
+    </div>
+  </div>
+
+  <div class="loading-shade" *ngIf="isLoading">
+    <mat-spinner diameter="50"></mat-spinner>
+  </div>
+
+  <div *ngIf="cliente && !isLoading">
+    <mat-card class="cliente-card">
+      <mat-card-content>
+        <div class="card-header">
+          <div class="cliente-info">
+            <h2 class="cliente-nome">
+              {{ cliente.tipoPessoa === 'FISICA' ? cliente.nome : cliente.razaoSocial }}
+            </h2>
+            <span class="tipo-badge" [class.fisica]="cliente.tipoPessoa === 'FISICA'" [class.juridica]="cliente.tipoPessoa === 'JURIDICA'">
+              {{ cliente.tipoPessoa === 'FISICA' ? 'Pessoa Física' : 'Pessoa Jurídica' }}
+            </span>
+            <span class="status-badge" [class.ativo]="cliente.ativo" [class.inativo]="!cliente.ativo">
+              {{ cliente.ativo ? 'Ativo' : 'Inativo' }}
+            </span>
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <mat-tab-group animationDuration="0ms" class="cliente-tabs">
+          <mat-tab label="Informações Gerais">
+            <div class="tab-content">
+              <div class="info-section">
+                <div class="info-item">
+                  <span class="info-label">{{ cliente.tipoPessoa === 'FISICA' ? 'CPF' : 'CNPJ' }}</span>
+                  <span class="info-value">{{ cliente.cpfCnpj }}</span>
+                </div>
+                
+                <div class="info-item" *ngIf="cliente.tipoPessoa === 'FISICA'">
+                  <span class="info-label">RG</span>
+                  <span class="info-value">{{ cliente.rg }}</span>
+                </div>
+                
+                <div class="info-item" *ngIf="cliente.tipoPessoa === 'JURIDICA'">
+                  <span class="info-label">Inscrição Estadual</span>
+                  <span class="info-value">{{ cliente.inscricaoEstadual }}</span>
+                </div>
+                
+                <div class="info-item" *ngIf="cliente.tipoPessoa === 'FISICA' && cliente.dataNascimento">
+                  <span class="info-label">Data de Nascimento</span>
+                  <span class="info-value">{{ cliente.dataNascimento | date:'dd/MM/yyyy' }}</span>
+                </div>
+                
+                <div class="info-item">
+                  <span class="info-label">Email</span>
+                  <span class="info-value">{{ cliente.email }}</span>
+                </div>
+                
+                <div class="info-item" *ngIf="cliente.dataCriacao">
+                  <span class="info-label">Data de Cadastro</span>
+                  <span class="info-value">{{ cliente.dataCriacao | date:'dd/MM/yyyy' }}</span>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+          
+          <mat-tab label="Endereços">
+            <div class="tab-content">
+              <div *ngFor="let endereco of cliente.enderecos; let i = index" class="endereco-item">
+                <div class="endereco-header">
+                  <h3>Endereço {{ i + 1 }}</h3>
+                  <span class="endereco-badge" *ngIf="endereco.principal">Principal</span>
+                </div>
+                
+                <div class="endereco-content">
+                  <div class="endereco-line">
+                    {{ endereco.logradouro }}, {{ endereco.numero }}
+                    <span *ngIf="endereco.complemento">, {{ endereco.complemento }}</span>
+                  </div>
+                  <div class="endereco-line">
+                    {{ endereco.bairro }}, {{ endereco.cidade }} - {{ endereco.estado }}
+                  </div>
+                  <div class="endereco-line">
+                    CEP: {{ endereco.cep }}
+                  </div>
+                  <div class="endereco-line" *ngIf="endereco.telefone">
+                    Telefone: {{ endereco.telefone }}
+                  </div>
+                </div>
+                
+                <mat-divider *ngIf="i < cliente.enderecos.length - 1"></mat-divider>
+              </div>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

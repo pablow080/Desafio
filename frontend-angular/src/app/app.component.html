@@ -1,0 +1,32 @@
+<div class="app-container">
+  <mat-toolbar color="primary" class="app-toolbar">
+    <button mat-icon-button (click)="sidenav.toggle()" aria-label="Menu">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span class="app-title">{{ title }}</span>
+    <span class="toolbar-spacer"></span>
+
+    <!-- Adicione outros elementos da toolbar aqui se necessário -->
+  </mat-toolbar>
+
+  <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav #sidenav mode="over" class="sidenav" fixedInViewport>
+      <mat-nav-list>
+        <a mat-list-item routerLink="/clientes" routerLinkActive="active"
+           (click)="sidenav.close()">
+          <mat-icon class="nav-icon" aria-hidden="true">people</mat-icon>
+          <span>Clientes</span>
+        </a>
+        <a mat-list-item routerLink="/clientes/novo" routerLinkActive="active"
+           (click)="sidenav.close()">
+          <mat-icon class="nav-icon" aria-hidden="true">person_add</mat-icon>
+          <span>Novo Cliente</span>
+        </a>
+      </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content class="sidenav-content">
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
