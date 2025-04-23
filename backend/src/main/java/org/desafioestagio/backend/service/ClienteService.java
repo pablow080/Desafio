@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.ByteArrayOutputStream;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -33,6 +34,9 @@ public class ClienteService {
     public Cliente salvar(Cliente cliente) {
         if (cliente.getEnderecos() == null || cliente.getEnderecos().isEmpty()) {
             throw new BusinessException("O cliente deve ter ao menos um endereço");
+        }
+        for (Endereco endereco : cliente.getEnderecos()) {
+            endereco.setCliente(cliente);
         }
 
         // Salvar cliente primeiro

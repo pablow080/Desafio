@@ -27,10 +27,10 @@
         <div class="card-header">
           <div class="cliente-info">
             <h2 class="cliente-nome">
-              {{ cliente.tipoPessoa === 'FISICA' ? cliente.nome : cliente.razaoSocial }}
+              {{ cliente.tipoPessoa === 'Física' ? cliente.nome : cliente.razaoSocial }}
             </h2>
-            <span class="tipo-badge" [class.fisica]="cliente.tipoPessoa === 'FISICA'" [class.juridica]="cliente.tipoPessoa === 'JURIDICA'">
-              {{ cliente.tipoPessoa === 'FISICA' ? 'Pessoa Física' : 'Pessoa Jurídica' }}
+            <span class="tipo-badge" [class.Física]="cliente.tipoPessoa === 'Física'" [class.Jurídica]="cliente.tipoPessoa === 'Jurídica'">
+              {{ cliente.tipoPessoa === 'Física' ? 'Pessoa Física' : 'Pessoa Jurídica' }}
             </span>
             <span class="status-badge" [class.ativo]="cliente.ativo" [class.inativo]="!cliente.ativo">
               {{ cliente.ativo ? 'Ativo' : 'Inativo' }}
@@ -45,38 +45,38 @@
             <div class="tab-content">
               <div class="info-section">
                 <div class="info-item">
-                  <span class="info-label">{{ cliente.tipoPessoa === 'FISICA' ? 'CPF' : 'CNPJ' }}</span>
+                  <span class="info-label">{{ cliente.tipoPessoa === 'Física' ? 'CPF' : 'CNPJ' }}</span>
                   <span class="info-value">{{ cliente.cpfCnpj }}</span>
                 </div>
-                
-                <div class="info-item" *ngIf="cliente.tipoPessoa === 'FISICA'">
+
+                <div class="info-item" *ngIf="cliente.tipoPessoa === 'Física'">
                   <span class="info-label">RG</span>
                   <span class="info-value">{{ cliente.rg }}</span>
                 </div>
-                
-                <div class="info-item" *ngIf="cliente.tipoPessoa === 'JURIDICA'">
+
+                <div class="info-item" *ngIf="cliente.tipoPessoa === 'Jurídica'">
                   <span class="info-label">Inscrição Estadual</span>
                   <span class="info-value">{{ cliente.inscricaoEstadual }}</span>
                 </div>
-                
-                <div class="info-item" *ngIf="cliente.tipoPessoa === 'FISICA' && cliente.dataNascimento">
+
+                <div class="info-item" *ngIf="cliente.tipoPessoa === 'Física' && cliente.dataNascimento">
                   <span class="info-label">Data de Nascimento</span>
                   <span class="info-value">{{ cliente.dataNascimento | date:'dd/MM/yyyy' }}</span>
                 </div>
-                
+
+                <div class="info-item" *ngIf="cliente.tipoPessoa === 'Jurídica' && cliente.dataCriacao">
+                  <span class="info-label">Data de Criação</span>
+                  <span class="info-value">{{ cliente.dataCriacao | date:'dd/MM/yyyy' }}</span>
+                </div>
+
                 <div class="info-item">
                   <span class="info-label">Email</span>
                   <span class="info-value">{{ cliente.email }}</span>
                 </div>
-                
-                <div class="info-item" *ngIf="cliente.dataCriacao">
-                  <span class="info-label">Data de Cadastro</span>
-                  <span class="info-value">{{ cliente.dataCriacao | date:'dd/MM/yyyy' }}</span>
-                </div>
               </div>
             </div>
           </mat-tab>
-          
+
           <mat-tab label="Endereços">
             <div class="tab-content">
               <div *ngFor="let endereco of cliente.enderecos; let i = index" class="endereco-item">
@@ -84,7 +84,7 @@
                   <h3>Endereço {{ i + 1 }}</h3>
                   <span class="endereco-badge" *ngIf="endereco.principal">Principal</span>
                 </div>
-                
+
                 <div class="endereco-content">
                   <div class="endereco-line">
                     {{ endereco.logradouro }}, {{ endereco.numero }}
@@ -100,7 +100,7 @@
                     Telefone: {{ endereco.telefone }}
                   </div>
                 </div>
-                
+
                 <mat-divider *ngIf="i < cliente.enderecos.length - 1"></mat-divider>
               </div>
             </div>

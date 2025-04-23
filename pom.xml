@@ -11,7 +11,7 @@
 
     <modules>
         <module>backend</module>
-        <module>wicket</module>
+        <module>frontend-wicket</module>
     </modules>
 
     <properties>

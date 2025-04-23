@@ -13,9 +13,13 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ReactiveFormsModule } from '@angular/forms';
+import { DatePipe } from '@angular/common';
+import {MAT_DATE_LOCALE} from '@angular/material/core';  // Importando o DatePipe
 
 @NgModule({
-  declarations: [],
+  declarations: [
+
+  ],
   imports: [
     CommonModule,
     SharedModule,
@@ -26,11 +30,12 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatButtonModule,
     MatIconModule,
     ClienteListaComponent,
-    ClienteFormComponent,
     ClienteDetalheComponent,
     EnderecoFormComponent,
     EnderecoListaComponent,
+    ClienteFormComponent,
     ClienteFilterComponent
-  ]
+  ],
+  providers: [DatePipe, { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' }]
 })
 export class ClientesModule { }

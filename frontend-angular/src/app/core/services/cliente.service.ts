@@ -1,70 +1,69 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Cliente } from '../models/cliente.model';
+import { DatePipe } from '@angular/common';  // Importando o DatePipe para formatação de datas
 
 @Injectable({
   providedIn: 'root'
 })
 export class ClienteService {
-  private apiUrl = '/api/clientes';
+  private apiUrl = 'http://localhost:8080/api/clientes';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private datePipe: DatePipe) { }
 
+  // Método para formatar a data para o formato yyyy-MM-dd
+  private formatDate(date: string | null): string | null {
+    if (date) {
+      return this.datePipe.transform(date, 'yyyy-MM-dd');  // Formata a data no padrão yyyy-MM-dd
+    }
+    return null;  // Retorna null se a data for nula
+  }
+
+  // Listar todos os clientes
   listarTodos(): Observable<Cliente[]> {
     return this.http.get<Cliente[]>(this.apiUrl);
   }
 
+  // Buscar cliente por ID
   buscarPorId(id: number): Observable<Cliente> {
     return this.http.get<Cliente>(`${this.apiUrl}/${id}`);
   }
 
-  buscarClientes(filtros: any): Observable<Cliente[]> {
-    let params = new HttpParams();
-
-    if (filtros.nome) params = params.set('nome', filtros.nome);
-    if (filtros.razaoSocial) params = params.set('razaoSocial', filtros.razaoSocial);
-    if (filtros.cpfCnpj) params = params.set('cpfCnpj', filtros.cpfCnpj);
-    if (filtros.email) params = params.set('email', filtros.email);
-    if (filtros.rg) params = params.set('rg', filtros.rg);
-    if (filtros.inscricaoEstadual) params = params.set('inscricaoEstadual', filtros.inscricaoEstadual);
-
-    return this.http.get<Cliente[]>(`${this.apiUrl}/buscar`, { params });
-  }
-
+  // Salvar cliente
   salvar(cliente: Cliente): Observable<Cliente> {
-    return this.http.post<Cliente>(this.apiUrl, cliente);
+    const clienteComDataFormatada = {
+      ...cliente,
+      dataNascimento: this.formatDate(cliente.dataNascimento),
+      dataCriacao: this.formatDate(cliente.dataCriacao),
+    };
+
+    return this.http.post<Cliente>(this.apiUrl, clienteComDataFormatada);
   }
 
+  // Atualizar cliente
   atualizar(id: number, cliente: Cliente): Observable<Cliente> {
-    return this.http.put<Cliente>(`${this.apiUrl}/${id}`, cliente);
+    const clienteComDataFormatada = {
+      ...cliente,
+      dataNascimento: this.formatDate(cliente.dataNascimento),
+      dataCriacao: this.formatDate(cliente.dataCriacao),
+    };
+
+    return this.http.put<Cliente>(`${this.apiUrl}/${id}`, clienteComDataFormatada);
   }
 
+  // Excluir cliente
   excluir(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
+  // Exportar clientes para Excel
   exportarExcel(): Observable<Blob> {
-    return this.http.get(`${this.apiUrl}/exportar/excel`, {
-      responseType: 'blob'
-    });
+    return this.http.get(`${this.apiUrl}/exportar/excel`, { responseType: 'blob' });
   }
 
+  // Exportar clientes para PDF
   exportarPdf(): Observable<Blob> {
-    return this.http.get(`${this.apiUrl}/exportar/pdf`, {
-      responseType: 'blob'
-    });
-  }
-
-  getClienteById(id: string) {
-    return this.http.get<Cliente>(`${this.apiUrl}/${id}`);
-  }
-
-  updateCliente(clienteData: any) {
-    return this.http.put<Cliente>(`${this.apiUrl}/${clienteData.id}`, clienteData);
-  }
-
-  createCliente(clienteData: any) {
-    return this.http.post<Cliente>(this.apiUrl, clienteData);
+    return this.http.get(`${this.apiUrl}/exportar/pdf`, { responseType: 'blob' });
   }
 }

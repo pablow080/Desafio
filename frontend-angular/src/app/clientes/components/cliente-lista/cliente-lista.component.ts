@@ -1,5 +1,10 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import {
+  MatCell, MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef, MatHeaderRow, MatHeaderRowDef, MatNoDataRow, MatRow, MatRowDef,
+  MatTable,
   MatTableDataSource
 } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
@@ -9,51 +14,59 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Cliente } from '../../../core/models/cliente.model';
 import { ClienteService } from '../../../core/services/cliente.service';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
-import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { CommonModule, NgIf, NgForOf } from '@angular/common';
-import { MatTableModule } from '@angular/material/table';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatSortModule } from '@angular/material/sort';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { RouterModule } from '@angular/router';
-import { ClienteFilterComponent } from '../cliente-filter/cliente-filter.component';
+import {RouterLink} from '@angular/router';
+import {MatButton, MatIconButton, MatMiniFabButton} from '@angular/material/button';
+import {MatCard, MatCardContent} from '@angular/material/card';
+import {MatFormField, MatInput, MatInputModule, MatSuffix} from '@angular/material/input';
+import {MatIcon} from '@angular/material/icon';
+import {MatTooltip} from '@angular/material/tooltip';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {NgClass, NgIf} from '@angular/common';
+import {MatFormFieldModule} from '@angular/material/form-field';
 
 @Component({
   selector: 'app-cliente-lista',
   templateUrl: './cliente-lista.component.html',
-  styleUrls: ['./cliente-lista.component.css'],
   imports: [
-    CommonModule,
-    NgIf,
-    NgForOf,
-    MatTableModule,
-    MatPaginatorModule,
-    MatSortModule,
-    MatDialogModule,
-    MatSnackBarModule,
-    MatIconModule,
-    MatButtonModule,
-    MatProgressSpinnerModule,
-    MatCardModule,
     MatFormFieldModule,
     MatInputModule,
-    RouterModule,
-    ClienteFilterComponent
-  ]
+    MatButton,
+    RouterLink,
+    MatCard,
+    MatCardContent,
+    MatFormField,
+    MatInput,
+    MatSuffix,
+    MatIcon,
+    MatMiniFabButton,
+    MatTooltip,
+    MatProgressSpinner,
+    MatTable,
+    MatSort,
+    MatColumnDef,
+    MatHeaderCell,
+    MatHeaderCellDef,
+    MatCell,
+    MatCellDef,
+    NgClass,
+    MatIconButton,
+    MatHeaderRow,
+    MatHeaderRowDef,
+    MatRow,
+    MatRowDef,
+    MatNoDataRow,
+    MatPaginator,
+    NgIf
+  ],
+  styleUrls: ['./cliente-lista.component.css']
 })
-export class ClienteListaComponent implements OnInit, OnDestroy {
+export class ClienteListaComponent implements OnInit, OnDestroy, AfterViewInit {
   displayedColumns: string[] = ['id', 'tipoPessoa', 'nome', 'cpfCnpj', 'email', 'ativo', 'acoes'];
   dataSource = new MatTableDataSource<Cliente>([]);
   isLoading = true;
+
   private destroy$ = new Subject<void>();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -62,15 +75,14 @@ export class ClienteListaComponent implements OnInit, OnDestroy {
   constructor(
     private clienteService: ClienteService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar,
-    private router: Router
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
     this.carregarClientes();
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
@@ -86,7 +98,8 @@ export class ClienteListaComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (clientes) => {
-          this.dataSource.data = clientes;
+          console.log('Clientes carregados:', clientes); // Verifique os dados retornados
+          this.dataSource.data = clientes;  // Atualizando a tabela com os dados
           this.isLoading = false;
         },
         error: (error) => {
@@ -144,7 +157,6 @@ export class ClienteListaComponent implements OnInit, OnDestroy {
           const a = document.createElement('a');
           a.href = url;
           a.download = 'clientes.xlsx';
-          document.body.appendChild(a);
           a.click();
           window.URL.revokeObjectURL(url);
         },
@@ -164,30 +176,12 @@ export class ClienteListaComponent implements OnInit, OnDestroy {
           const a = document.createElement('a');
           a.href = url;
           a.download = 'clientes.pdf';
-          document.body.appendChild(a);
           a.click();
           window.URL.revokeObjectURL(url);
         },
         error: (error) => {
           console.error('Erro ao exportar PDF', error);
           this.snackBar.open('Erro ao exportar PDF', 'Fechar', { duration: 3000 });
-        }
-      });
-  }
-
-  onFiltroAplicado(filtros: any): void {
-    this.isLoading = true;
-    this.clienteService.buscarClientes(filtros)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (clientes) => {
-          this.dataSource.data = clientes;
-          this.isLoading = false;
-        },
-        error: (error) => {
-          console.error('Erro ao filtrar clientes', error);
-          this.snackBar.open('Erro ao filtrar clientes', 'Fechar', { duration: 3000 });
-          this.isLoading = false;
         }
       });
   }

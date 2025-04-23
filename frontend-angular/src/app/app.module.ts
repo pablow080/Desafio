@@ -9,7 +9,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatCardModule } from '@angular/material/card';
-import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ClientesModule } from './clientes/clientes.module';
 import { SharedModule } from './shared/shared.module';
@@ -18,14 +17,28 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
-import { MatOptionModule } from '@angular/material/core';
+import { MAT_DATE_FORMATS, MatNativeDateModule, MatOptionModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';  // Se estiver usando inputs do Material
-import {ClienteFormComponent} from './clientes/components/cliente-form/cliente-form.component'; // Se estiver usando mat-error
+import { MatInputModule } from '@angular/material/input';
+import { DatePipe } from '@angular/common';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+
+// Formato de data para yyyy-MM-dd
+const MY_DATE_FORMATS = {
+  parse: {
+    dateInput: 'yyyy-MM-dd',  // Este formato é usado para parsing de input de data
+  },
+  display: {
+    dateInput: 'yyyy-MM-dd',  // Este formato é usado para exibir a data no input
+    monthYearLabel: 'MMM yyyy', // Exibição no seletor de mês e ano
+    dateA11yLabel: 'LL',  // Formato de acessibilidade
+    monthYearA11yLabel: 'MMMM yyyy', // Formato de acessibilidade para mês/ano
+  }
+};
 
 @NgModule({
   declarations: [
-
+    // Se você tiver componentes específicos, adicione aqui
   ],
   imports: [
     BrowserModule,
@@ -50,9 +63,13 @@ import {ClienteFormComponent} from './clientes/components/cliente-form/cliente-f
     MatOptionModule,
     MatFormFieldModule,
     MatInputModule,
-    AppComponent,
-    ClienteFormComponent
+    MatDatepickerModule,
+    MatNativeDateModule,
   ],
-  providers: []
+  providers: [
+    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
+    DatePipe  // Adicione o DatePipe aos providers
+  ],
+  bootstrap: []
 })
 export class AppModule { }

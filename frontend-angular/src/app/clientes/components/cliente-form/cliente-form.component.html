@@ -22,54 +22,61 @@
           <mat-form-field appearance="outline">
             <mat-label>Tipo de Pessoa</mat-label>
             <mat-select formControlName="tipoPessoa">
-              <mat-option value="FISICA">Física</mat-option>
-              <mat-option value="JURIDICA">Jurídica</mat-option>
+              <mat-option value="Física">Física</mat-option>
+              <mat-option value="Jurídica">Jurídica</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
 
         <div class="form-row">
-          <mat-form-field appearance="outline" *ngIf="clienteForm.get('tipoPessoa')?.value === 'FISICA'">
+          <mat-form-field appearance="outline" *ngIf="clienteForm.get('tipoPessoa')?.value === 'Física'">
             <mat-label>Nome</mat-label>
             <input matInput formControlName="nome" placeholder="Ex. João Silva">
             <mat-error *ngIf="nomeControl?.hasError('required')">Nome é obrigatório</mat-error>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" *ngIf="clienteForm.get('tipoPessoa')?.value === 'JURIDICA'">
+          <mat-form-field appearance="outline" *ngIf="clienteForm.get('tipoPessoa')?.value === 'Jurídica'">
             <mat-label>Razão Social</mat-label>
             <input matInput formControlName="razaoSocial" placeholder="Ex. Empresa LTDA">
             <mat-error *ngIf="clienteForm.get('razaoSocial')?.hasError('required')">Razão Social é obrigatória</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>{{ clienteForm.get('tipoPessoa')?.value === 'FISICA' ? 'CPF' : 'CNPJ' }}</mat-label>
+            <mat-label>{{ clienteForm.get('tipoPessoa')?.value === 'Física' ? 'CPF' : 'CNPJ' }}</mat-label>
             <input matInput formControlName="cpfCnpj" placeholder="Ex. 123.456.789-00">
             <mat-error *ngIf="clienteForm.get('cpfCnpj')?.hasError('required')">
-              {{ clienteForm.get('tipoPessoa')?.value === 'FISICA' ? 'CPF' : 'CNPJ' }} é obrigatório
+              {{ clienteForm.get('tipoPessoa')?.value === 'Física' ? 'CPF' : 'CNPJ' }} é obrigatório
             </mat-error>
           </mat-form-field>
         </div>
 
         <div class="form-row">
-          <mat-form-field appearance="outline" *ngIf="clienteForm.get('tipoPessoa')?.value === 'FISICA'">
+          <mat-form-field appearance="outline" *ngIf="clienteForm.get('tipoPessoa')?.value === 'Física'">
             <mat-label>RG</mat-label>
             <input matInput formControlName="rg" placeholder="Ex. 12.345.678-9">
             <mat-error *ngIf="clienteForm.get('rg')?.hasError('required')">RG é obrigatório</mat-error>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" *ngIf="clienteForm.get('tipoPessoa')?.value === 'JURIDICA'">
+          <mat-form-field appearance="outline" *ngIf="clienteForm.get('tipoPessoa')?.value === 'Jurídica'">
             <mat-label>Inscrição Estadual</mat-label>
             <input matInput formControlName="inscricaoEstadual" placeholder="Ex. 123456789">
             <mat-error *ngIf="clienteForm.get('inscricaoEstadual')?.hasError('required')">Inscrição Estadual é obrigatória</mat-error>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" *ngIf="clienteForm.get('tipoPessoa')?.value === 'FISICA'">
+          <mat-form-field appearance="outline">
             <mat-label>Data de Nascimento</mat-label>
             <input matInput [matDatepicker]="picker" formControlName="dataNascimento">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
-        </div>
+
+          <mat-form-field appearance="outline" *ngIf="clienteForm.get('tipoPessoa')?.value === 'Jurídica'">
+          <mat-label>Data de Criação</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="dataCriacao">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+</div>
 
         <div class="form-row">
           <mat-form-field appearance="outline">

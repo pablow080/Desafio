@@ -8,8 +8,8 @@ export interface Cliente {
   cpfCnpj: string;
   rg?: string;
   inscricaoEstadual?: string;
-  dataNascimento?: Date;
-  dataCriacao?: Date;
+  dataNascimento: string | null;
+  dataCriacao: string | null;
   email: string;
   ativo: boolean;
   enderecos: Endereco[];

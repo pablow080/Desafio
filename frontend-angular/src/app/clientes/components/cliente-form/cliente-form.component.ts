@@ -1,11 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import {FormBuilder, FormGroup, Validators, FormArray, ReactiveFormsModule} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ClienteService } from '../../../core/services/cliente.service';
 import { Cliente } from '../../../core/models/cliente.model';
 import { Endereco } from '../../../core/models/endereco.model';
-import { CommonModule, NgIf, NgForOf } from '@angular/common';
+import { CommonModule, NgIf, NgForOf, DatePipe } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -24,6 +24,7 @@ import { RouterModule } from '@angular/router';
   selector: 'app-cliente-form',
   templateUrl: './cliente-form.component.html',
   styleUrls: ['./cliente-form.component.css'],
+  providers: [DatePipe],
   imports: [
     CommonModule,
     NgIf,
@@ -83,13 +84,14 @@ export class ClienteFormComponent implements OnInit, OnDestroy {
 
   initForm(): void {
     this.clienteForm = this.fb.group({
-      tipoPessoa: ['FISICA', Validators.required],
+      tipoPessoa: ['Física', Validators.required],
       nome: ['', Validators.required],
       razaoSocial: [''],
       cpfCnpj: ['', Validators.required],
       rg: [''],
       inscricaoEstadual: [''],
       dataNascimento: [null],
+      dataCriacao: [null],
       email: ['', [Validators.required, Validators.email]],
       ativo: [true],
       enderecos: this.fb.array([this.createEnderecoFormGroup()])
@@ -97,7 +99,7 @@ export class ClienteFormComponent implements OnInit, OnDestroy {
 
     // Handle tipo pessoa changes
     this.clienteForm.get('tipoPessoa')?.valueChanges.subscribe(tipo => {
-      if (tipo === 'FISICA') {
+      if (tipo === 'Física') {
         this.clienteForm.get('nome')?.setValidators(Validators.required);
         this.clienteForm.get('razaoSocial')?.clearValidators();
         this.clienteForm.get('rg')?.setValidators(Validators.required);
@@ -136,10 +138,6 @@ export class ClienteFormComponent implements OnInit, OnDestroy {
 
   get nomeControl() {
     return this.clienteForm.get('nome');
-  }
-
-  get enderecosControls() {
-    return (this.clienteForm.get('enderecos') as FormArray).controls;
   }
 
   carregarCliente(id: number): void {
@@ -273,6 +271,7 @@ export class ClienteFormComponent implements OnInit, OnDestroy {
       rg: formValue.rg,
       inscricaoEstadual: formValue.inscricaoEstadual,
       dataNascimento: formValue.dataNascimento,
+      dataCriacao: formValue.dataCriacao,
       email: formValue.email,
       ativo: formValue.ativo,
       enderecos: formValue.enderecos.map((endereco: any) => {
